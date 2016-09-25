@@ -20,7 +20,8 @@
 
       document.getElementById("close-btn").addEventListener("click", function (e) {
         const window = remote.getCurrentWindow();
-        window.close();
+        // Quit the app
+        remote.app.quit();
       });
     };
 

@@ -1,25 +1,28 @@
-const {app, BrowserWindow} = require('electron')
+
+const {app, BrowserWindow, ipcMain} = require('electron')
+const exec                          = require('child_process').exec;
+var   juke                          = require('Juke-Jitsu')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win
+let mainWindow
 
 function createWindow () {
     // Create the browser window.
-    win = new BrowserWindow({ width: 800
-                            , height: 600
-                            , frame: false
-                            })
+    mainWindow = new BrowserWindow({ width: 800
+                                   , height: 600
+                                   , frame: false
+                                   })
 
     // and load the index.html of the app.
-    win.loadURL(`file://${__dirname}/html/index.html`)
+    mainWindow.loadURL(`file://${__dirname}/html/index.html`)
 
     // Emitted when the window is closed.
-    win.on('closed', () => {
+    mainWindow.on('closed', () => {
         // Dereference the window object, usually you would store windows
         // in an array if your app supports multi windows, this is the time
         // when you should delete the corresponding element.
-        win = null
+        mainWindow = null
     })
 }
 
@@ -40,10 +43,35 @@ app.on('window-all-closed', () => {
 app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
-    if (win === null) {
+    if (mainWindow === null) {
         createWindow()
     }
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+app.on('quit', function (){
+    // Kill Juke server
+    jukeServer.kill()
+})
+
+var isJukeRunning = false;
+
+ipcMain.on('juke-start', function () {
+
+    /*****************************************/
+    console.warn('DON\'T USE EXEC');
+    /*****************************************/
+
+    // TODO: juke.startServer()
+    // TODO: Add callback to startServer
+    // mainWindow.webContents.send('juke-started')
+
+    // jukeServer = exec('npm start', {cwd: '/home/chrx/git/Juke-Jitsu/Server'}, function (error, stdout, stderr) {
+    //     console.log(stdout)
+    //     console.error(stderr)
+    //     if (!error) {
+    //         isJukeRunning = true;
+    //         mainWindow.webContents.send('juke-started')
+    //     }
+    // });
+
+});

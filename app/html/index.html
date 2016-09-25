@@ -10,7 +10,7 @@
     <script src="../js/angular/angular-material.min.js"></script>
 
     <!-- Include Your JS -->
-    <script src="../js/index.js"></script>
+    <script src="../js/sensei.js"></script>
     <script src="../js/renderer.js"></script>
     <script src="../js/electronlikevs.js"></script>
 
@@ -21,31 +21,46 @@
     <link rel="stylesheet" type="text/css" href="../css/index.css"/>
     <link rel="stylesheet" type="text/css" href="../css/electronlikevs.css"/>
 </head>
-<body ng-app="BoilerplateApp" ng-controller="bpCtrl">
-    <div id="title-bar">
-        <div id="title">Electron Boilerplate</div>
+<body ng-app="Sensei" ng-controller="MainController">
+    <div id="body-container">
+      <div id="title-bar">
+        <div id="title">Juke-Jitsu Sensei</div>
         <div id="title-bar-btns">
-            <button id="min-btn">-</button>
-            <button id="max-btn">+</button>
-            <button id="close-btn">x</button>
+          <button id="min-btn">-</button>
+          <button id="max-btn">+</button>
+          <button id="close-btn">x</button>
         </div>
-    </div>
-    <div id="content">
+      </div>
+      <div id="content">
+        <img class="logo float right" src="../img/juke-jitsu-512x512.png"></img>
+        <jj-main class="float"></jj-main>
 
-        <!-- Your HTML content here -->
+        <div class="webview">
+          <h2 class="indicator"></h2>
+          <webview id="juke-view" src="http://localhost:3000"></webview>
+        </div>
 
-        <h1>Electron Boilerplate</h1>
-        <h4>Brought to you by <a href="https://www.github.com/hawkins">@hawkins</a></h4>
-
-        <hr/>
-
-        <h4>This boilerplate is built with the following technologies in mind:</h4>
-        <ul>
-            <li ng-repeat="tech in technologies"><a href="{{tech.link}}">{{tech.name}}</a></li>
-        </ul>
-    </div>
-    <div id="footer">
+      </div>
+      <div id="footer">
         {{status}}
+      </div>
     </div>
+    <script>
+    onload = () => {
+      const webview = document.getElementById('juke-view')
+      const indicator = document.querySelector('.indicator')
+
+      const loadstart = () => {
+        indicator.innerText = 'loading...'
+      }
+
+      const loadstop = () => {
+        indicator.innerText = ''
+      }
+
+      webview.addEventListener('did-start-loading', loadstart)
+      webview.addEventListener('did-stop-loading', loadstop)
+    }
+    </script>
 </body>
 </html>
